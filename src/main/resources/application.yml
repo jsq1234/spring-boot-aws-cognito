@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+
+cognito:
+  pool_id: eu-north-1_xk6yZOFWH
+  client_id: 69s5va7c31gmqpgmbik77mg3fl
+  client_secret: 4l3ufj0nbl7g1eoo6hcevtiq2cvvde7l3dlbbs3ofag1p15m2fb
+  region: eu-north-1
+
+
+logging:
+   pattern:
+      console: "%5p | %-40.40logger{39} : %m%n"
