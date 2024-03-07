@@ -7,6 +7,8 @@ import com.amazonaws.services.cognitoidp.model.AuthFlowType;
 import com.amazonaws.services.cognitoidp.model.ConfirmSignUpRequest;
 import com.amazonaws.services.cognitoidp.model.ConfirmSignUpResult;
 import com.amazonaws.services.cognitoidp.model.GetGroupRequest;
+import com.amazonaws.services.cognitoidp.model.GetUserRequest;
+import com.amazonaws.services.cognitoidp.model.GetUserResult;
 import com.amazonaws.services.cognitoidp.model.InitiateAuthRequest;
 import com.amazonaws.services.cognitoidp.model.InitiateAuthResult;
 import com.amazonaws.services.cognitoidp.model.SignUpRequest;
@@ -103,6 +105,15 @@ public class CognitoService{
 
         return result;
 
+    }
+
+    public GetUserResult fetchUserInfo(String accessToken){
+        GetUserRequest request = new GetUserRequest()
+                                    .withAccessToken(accessToken);
+
+        GetUserResult result = cognitoIdentityProvider.getUser(request);
+
+        return result;
     }
     
 }

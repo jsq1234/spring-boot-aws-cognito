@@ -15,6 +15,10 @@ cognito:
   client_secret: 4l3ufj0nbl7g1eoo6hcevtiq2cvvde7l3dlbbs3ofag1p15m2fb
   region: eu-north-1
 
+aws:
+  access_key: ${AccessKey}
+  secret_access_key: ${SecretAccessKey}
+
 
 logging:
    pattern:

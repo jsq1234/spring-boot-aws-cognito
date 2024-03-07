@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.amazonaws.services.cognitoidp.model.ConfirmSignUpResult;
+import com.amazonaws.services.cognitoidp.model.GetUserRequest;
+import com.amazonaws.services.cognitoidp.model.GetUserResult;
 import com.amazonaws.services.cognitoidp.model.InitiateAuthResult;
 import com.amazonaws.services.cognitoidp.model.SignUpResult;
+import com.cognito.api.dto.AccessToken;
 import com.cognito.api.dto.ConfirmEmailRequest;
 import com.cognito.api.dto.LoginRequest;
 import com.cognito.api.dto.SignUpRequest;
@@ -42,6 +45,12 @@ public class AuthController {
     public ResponseEntity<InitiateAuthResult> loginUser(@Valid @RequestBody LoginRequest loginRequest){
         InitiateAuthResult result = cognitoService
                                         .signInUser(loginRequest.email(), loginRequest.password());
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/user")
+    public ResponseEntity<GetUserResult> getUserInfo(@RequestBody AccessToken token){
+        GetUserResult result = cognitoService.fetchUserInfo(token.token());
         return ResponseEntity.ok(result);
     }
 }

@@ -26,10 +26,17 @@ public class CognitoPoolConfig {
     @Value("${cognito.region}")
     private String region;
 
+    @Value("${aws.access_key}")
+    private String accessKey;
+
+    @Value("${aws.secret_access_key}")
+    private String secretAccessKey;
+
     @Bean
     public AWSCognitoIdentityProvider awsCognitoIdentityProvider() {
+        BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretAccessKey);
         return AWSCognitoIdentityProviderClient.builder()
-                    .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials("", "")))
+                    .withCredentials(new AWSStaticCredentialsProvider(credentials))
                     .withRegion(Regions.fromName(region))
                     .build();
     }
