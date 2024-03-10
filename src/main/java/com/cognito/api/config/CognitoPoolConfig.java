@@ -8,6 +8,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProviderClient;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 
 
@@ -31,6 +32,13 @@ public class CognitoPoolConfig {
 
     @Value("${aws.secret_access_key}")
     private String secretAccessKey;
+
+    private String issuer;
+
+    @PostConstruct
+    void init(){
+        issuer = String.format("https://cognito-idp.%s.amazonaws.com/%s", region, poolId);
+    }
 
     @Bean
     public AWSCognitoIdentityProvider awsCognitoIdentityProvider() {

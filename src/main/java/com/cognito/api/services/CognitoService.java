@@ -2,11 +2,14 @@ package com.cognito.api.services;
 
 import org.springframework.stereotype.Service;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
+import com.amazonaws.services.cognitoidp.model.AdminAddUserToGroupRequest;
+import com.amazonaws.services.cognitoidp.model.AdminAddUserToGroupResult;
+import com.amazonaws.services.cognitoidp.model.AdminGetUserRequest;
+import com.amazonaws.services.cognitoidp.model.AdminGetUserResult;
 import com.amazonaws.services.cognitoidp.model.AttributeType;
 import com.amazonaws.services.cognitoidp.model.AuthFlowType;
 import com.amazonaws.services.cognitoidp.model.ConfirmSignUpRequest;
 import com.amazonaws.services.cognitoidp.model.ConfirmSignUpResult;
-import com.amazonaws.services.cognitoidp.model.GetGroupRequest;
 import com.amazonaws.services.cognitoidp.model.GetUserRequest;
 import com.amazonaws.services.cognitoidp.model.GetUserResult;
 import com.amazonaws.services.cognitoidp.model.InitiateAuthRequest;
@@ -76,6 +79,12 @@ public class CognitoService{
 
         log.info("User[{}] successfully confirmed: {}", email, confirmationResult);
 
+        log.info("Adding user to User group");
+
+        var result = addUserToUserGroup(email);
+
+        log.info("Added user to User group: {}", result);
+
         return confirmationResult;
     }
 
@@ -115,5 +124,24 @@ public class CognitoService{
 
         return result;
     }
+
+    public AdminGetUserResult fetchUserInfoByEmail(String email){
+        AdminGetUserRequest request = new AdminGetUserRequest()
+                                            .withUserPoolId(cognitoPoolConfig.getPoolId())
+                                            .withUsername(email);
+        
+        AdminGetUserResult result =  cognitoIdentityProvider.adminGetUser(request);
+        
+        return result;
+    }
     
+    public AdminAddUserToGroupResult addUserToUserGroup(String email){
+        AdminAddUserToGroupRequest request = new AdminAddUserToGroupRequest()
+                                                .withGroupName("user")
+                                                .withUserPoolId(cognitoPoolConfig.getPoolId())
+                                                .withUsername(email);
+        AdminAddUserToGroupResult result = cognitoIdentityProvider.adminAddUserToGroup(request);
+
+        return result;
+    }
 }

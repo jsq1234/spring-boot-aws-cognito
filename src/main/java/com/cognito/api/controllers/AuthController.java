@@ -16,14 +16,21 @@ import com.cognito.api.dto.ConfirmEmailRequest;
 import com.cognito.api.dto.LoginRequest;
 import com.cognito.api.dto.SignUpRequest;
 import com.cognito.api.services.CognitoService;
+import com.cognito.api.utils.JwtTokenProcessor;
+import com.nimbusds.jwt.JWTClaimsSet;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
+@Slf4j
 @RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
     private CognitoService cognitoService;
+
+    @Autowired
+    private JwtTokenProcessor tokenProcessor;
 
     @PostMapping("/signup")
     public ResponseEntity<SignUpResult> createUser(@Valid @RequestBody SignUpRequest signUpRequest){
@@ -52,6 +59,12 @@ public class AuthController {
     public ResponseEntity<GetUserResult> getUserInfo(@RequestBody AccessToken token){
         GetUserResult result = cognitoService.fetchUserInfo(token.token());
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/decode")
+    public ResponseEntity<JWTClaimsSet> decodeJwtToken(@RequestBody AccessToken token) throws Exception{
+        log.info("{}",cognitoService.fetchUserInfo(token.token()));
+        return ResponseEntity.ok(tokenProcessor.decodeToken(token.token()));
     }
 }
 
